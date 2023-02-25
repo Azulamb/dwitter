@@ -1,14 +1,14 @@
 import * as TwitterTypes from '../twitter.d.ts';
 import { APICounter } from '../APICounter.ts';
 
-interface ShowUserIdOption {
+type ShowUserIdOption = {
 	user_id: string;
 	include_entities?: boolean;
-}
-interface ShowScreenNameOption {
+};
+type ShowScreenNameOption = {
 	screen_name: string;
 	include_entities?: boolean;
-}
+};
 
 type ShowOption = ShowUserIdOption | ShowScreenNameOption;
 
@@ -28,7 +28,7 @@ export class Users extends APICounter {
 			return this.limitError();
 		}
 
-		return this.oauthFetch.get(this.createUrl(api), <{}> option).then((response) => {
+		return this.oauthFetch.get(this.createUrl(api), option).then((response) => {
 			this.addSuccessRequest(api);
 			return response.json();
 		}).then(async (result) => {

@@ -15,6 +15,7 @@ export class V1_1 extends TwitterAPI {
 		};
 	}
 
+	// deno-lint-ignore no-explicit-any
 	public import(data: any) {
 		if (typeof data !== 'object') {
 			return;

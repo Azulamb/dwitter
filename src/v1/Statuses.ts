@@ -1,16 +1,16 @@
 import * as TwitterTypes from '../twitter.d.ts';
 import { APICounter } from '../APICounter.ts';
 
-interface HomeTimelineOption {
+type HomeTimelineOption = {
 	count?: number; // Default 20, Max 200
 	since_id?: number; //
 	max_id?: number; //
 	trim_user?: boolean; //
 	exclude_replies?: boolean; //
 	include_entities?: boolean; //
-}
+};
 
-interface UserTimelineOption {
+type UserTimelineOption = {
 	count?: number; // Max 200
 	since_id?: number;
 	max_id?: number; //
@@ -19,15 +19,15 @@ interface UserTimelineOption {
 	include_rts?: boolean; //
 	user_id?: string;
 	screen_name?: string;
-}
+};
 
-interface ShowOption {
+type ShowOption = {
 	trim_user?: boolean;
 	include_my_retweet?: boolean;
 	include_entities?: boolean;
 	include_ext_alt_text?: boolean;
 	include_card_uri?: boolean;
-}
+};
 
 export class Statuses extends APICounter {
 	protected path = 'statuses/';
@@ -54,7 +54,7 @@ export class Statuses extends APICounter {
 			return this.limitError();
 		}
 
-		return this.oauthFetch.get(this.createUrl(api), <{}> option).then((response) => {
+		return this.oauthFetch.get(this.createUrl(api), option).then((response) => {
 			this.addSuccessRequest(api);
 			return response.json();
 		}).then(async (result) => {
@@ -77,7 +77,7 @@ export class Statuses extends APICounter {
 			return this.limitError();
 		}
 
-		return this.oauthFetch.get(this.createUrl(api), <{}> option).then((response) => {
+		return this.oauthFetch.get(this.createUrl(api), option).then((response) => {
 			this.addSuccessRequest(api);
 			return response.json();
 		}).then(async (result) => {
@@ -101,7 +101,7 @@ export class Statuses extends APICounter {
 		}
 		const opt = Object.assign({ id: id }, option);
 
-		return this.oauthFetch.get(this.createUrl(api), <{}> opt).then((response) => {
+		return this.oauthFetch.get(this.createUrl(api), opt).then((response) => {
 			this.addSuccessRequest(api);
 			return response.json();
 		}).then(async (result) => {

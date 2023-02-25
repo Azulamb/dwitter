@@ -35,6 +35,7 @@ export class APICounter extends TwitterAPI {
 		return this.logs;
 	}
 
+	// deno-lint-ignore no-explicit-any
 	public import(data: any) {
 		if (typeof data !== 'object') {
 			return;

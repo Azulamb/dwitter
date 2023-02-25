@@ -7,15 +7,18 @@ import { V2_0 } from './v2/0.ts';
 
 export class Dwitter extends TwitterAPI {
 	protected logs: TwitterApiLogs = {
+		// deno-lint-ignore no-explicit-any no-unused-vars
 		saveTwitterApiLogs: (data: any) => {
 			return Promise.resolve();
 		},
 		loadTwitterApiLogs: () => {
+			// deno-lint-ignore no-explicit-any
 			return Promise.resolve(<any> {});
 		},
 	};
 
 	protected save(): Promise<void> {
+		// deno-lint-ignore no-unused-vars
 		return this.logs.saveTwitterApiLogs(this.export()).catch((error) => {});
 	}
 
@@ -39,6 +42,7 @@ export class Dwitter extends TwitterAPI {
 	}
 
 	constructor(apiKey: string, apiKeySecret: string, logs?: TwitterApiLogs) {
+		// deno-lint-ignore no-explicit-any
 		super(<any> null);
 		this.oauth.setAPIKey(apiKey, apiKeySecret);
 		this.oauth2.setAPIKey(apiKey, apiKeySecret);
@@ -56,6 +60,7 @@ export class Dwitter extends TwitterAPI {
 		};
 	}
 
+	// deno-lint-ignore no-explicit-any
 	public import(data: any) {
 		if (typeof data !== 'object') {
 			return;

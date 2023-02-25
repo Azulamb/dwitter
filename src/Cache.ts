@@ -1,5 +1,5 @@
 import { Tweet } from './twitter.d.ts';
-import * as path from 'https://deno.land/std/path/mod.ts';
+import { path } from './std.ts';
 
 interface TWITTER_LOG {
 	[keys: string]: TWITTER_LOG | number[];
@@ -40,6 +40,7 @@ export class Cache implements TwitterTimelineCache, TwitterApiLogs {
 	public loadTweets(): Promise<Tweet[]> {
 		return Deno.readTextFile(path.join(this.dir, 'timeline.json')).then((text) => {
 			return JSON.parse(text);
+			// deno-lint-ignore no-unused-vars
 		}).catch((error) => {
 			return [];
 		});
@@ -55,6 +56,7 @@ export class Cache implements TwitterTimelineCache, TwitterApiLogs {
 	public loadTwitterApiLogs(): Promise<TWITTER_LOG> {
 		return Deno.readTextFile(path.join(this.dir, 'logs.json')).then((text) => {
 			return <TWITTER_LOG> JSON.parse(text);
+			// deno-lint-ignore no-unused-vars
 		}).catch((error) => {
 			return {};
 		});

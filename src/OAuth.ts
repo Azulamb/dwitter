@@ -2,14 +2,14 @@ import * as TwitterTypes from './twitter.d.ts';
 import { APICounter } from './APICounter.ts';
 import { HMAC_SHA1 } from './Crypto.ts';
 
-interface FetchParams {
+type FetchParams = {
 	[keys: string]: string | number | boolean | undefined;
-}
+};
 
-interface RequestTokenOption {
+type RequestTokenOption = {
 	oauth_callback: string;
 	x_auth_access_type?: 'read' | 'write';
-}
+};
 
 interface AccessTokenOption {
 	oauth_token: string;
@@ -157,7 +157,7 @@ export class OAuth extends APICounter {
 	public request_token(option: RequestTokenOption): Promise<string> {
 		const api = 'request_token';
 
-		return this.request('POST', this.getPath() + api, <{}> option, true).then((response) => {
+		return this.request('POST', this.getPath() + api, option, true).then((response) => {
 			if (response.status === 200) {
 				return response.text();
 			}
