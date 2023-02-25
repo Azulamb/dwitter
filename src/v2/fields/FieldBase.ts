@@ -1,4 +1,2 @@
-export class FieldBase
-{
-
+export class FieldBase {
 }

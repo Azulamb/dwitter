@@ -1,0 +1,26 @@
+{
+	"tasks": {
+		"sample": "deno run --allow-read --allow-net --allow-env ./sample/sample.ts"
+	},
+	"lint": {
+		"files": {
+			"include": ["src/", "mod.ts", "tests/", "sample/"]
+		},
+		"rules": {
+		  "tags": ["recommended"],
+		  "include": [],
+		  "exclude": ["require-await"]
+		}
+	},
+	"fmt": {
+		"files": {
+			"include": ["src/", "mod.ts", "tests/", "sample/"]
+		},
+		"options": {
+			"useTabs": true,
+			"indentWidth": 4,
+			"lineWidth": 160,
+			"singleQuote": true
+		}
+	}
+}

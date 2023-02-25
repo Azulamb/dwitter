@@ -1,15 +1,13 @@
 // v1.1
 
-export interface AccessToken
-{
+export interface AccessToken {
 	oauth_token: string;
 	oauth_token_secret: string;
 	user_id: string;
 	screen_name: string;
 }
 
-export interface TwitterURL
-{
+export interface TwitterURL {
 	url: string;
 	expanded_url: string;
 	display_url: string;
@@ -20,26 +18,22 @@ export type TranslatorType = 'none';
 
 export type Lang = string | null;
 
-export interface UserEntities
-{
-	url:
-	{
+export interface UserEntities {
+	url: {
 		urls: TwitterURL[];
 	};
-	description:
-	{
+	description: {
 		urls: TwitterURL[];
 	};
 }
 
-export interface UserStatus
-{
+export interface UserStatus {
 	created_at: string;
 	id: number;
 	id_str: string;
 	text: string;
 	truncated: boolean;
-	entities: { hashtags: [], symbols: [], user_mentions: [], urls: [] };
+	entities: { hashtags: []; symbols: []; user_mentions: []; urls: [] };
 	source: string;
 	in_reply_to_status_id: null | number;
 	in_reply_to_status_id_str: null | string;
@@ -58,8 +52,7 @@ export interface UserStatus
 	lang: string;
 }
 
-export interface User
-{
+export interface User {
 	id: number;
 	id_str: string;
 	name: string;
@@ -67,7 +60,7 @@ export interface User
 	location: string;
 	profile_location: string | null;
 	description: string;
-	url: string,
+	url: string;
 	entities: UserEntities;
 	protected: boolean;
 	followers_count: number;
@@ -81,7 +74,7 @@ export interface User
 	verified: boolean;
 	statuses_count: number;
 	lang: Lang;
-	status: UserStatus,
+	status: UserStatus;
 	contributors_enabled: boolean;
 	is_translator: boolean;
 	is_translation_enabled: boolean;
@@ -109,16 +102,14 @@ export interface User
 	needs_phone_verification: boolean;
 }
 
-export interface Entities
-{
+export interface Entities {
 	hashtags: string[];
 	symbols: string[];
 	user_mentions: [];
 	urls: TwitterURL[];
 }
 
-export interface Tweet
-{
+export interface Tweet {
 	created_at: string;
 	id: number;
 	id_str: string;
@@ -148,91 +139,94 @@ export interface Tweet
 
 // v2.0
 
-export interface BearerToken
-{
+export interface BearerToken {
 	token_type: 'bearer';
 	access_token: string;
 }
 
-export interface InvalidateBearerToken
-{
+export interface InvalidateBearerToken {
 	access_token: string;
 }
 
-export type TweetFields = 'id' |
-	'text' |
-	'attachments' |
-	'author_id' |
-	'context_annotations' |
-	'created_at' |
-	'entities' |
-	'geo' |
-	'in_reply_to_user_id' |
-	'lang' |
-	'non_public_metrics' |
-	'organic_metrics' |
-	'possibly_sensitive' |
-	'promoted_metrics' |
-	'public_metrics' |
-	'referenced_tweets' |
-	'reply_settings' |
-	'source' |
-	'withheld';
+export type TweetFields =
+	| 'id'
+	| 'text'
+	| 'attachments'
+	| 'author_id'
+	| 'context_annotations'
+	| 'created_at'
+	| 'entities'
+	| 'geo'
+	| 'in_reply_to_user_id'
+	| 'lang'
+	| 'non_public_metrics'
+	| 'organic_metrics'
+	| 'possibly_sensitive'
+	| 'promoted_metrics'
+	| 'public_metrics'
+	| 'referenced_tweets'
+	| 'reply_settings'
+	| 'source'
+	| 'withheld';
 
-export type UserFields = 'id' |
-	'name' |
-	'username' |
-	'created_at' |
-	'description' |
-	'entities' |
-	'location' |
-	'pinned_tweet_id' |
-	'profile_image_url' |
-	'protected' |
-	'public_metrics' |
-	'url' |
-	'verified' |
-	'withheld';
+export type UserFields =
+	| 'id'
+	| 'name'
+	| 'username'
+	| 'created_at'
+	| 'description'
+	| 'entities'
+	| 'location'
+	| 'pinned_tweet_id'
+	| 'profile_image_url'
+	| 'protected'
+	| 'public_metrics'
+	| 'url'
+	| 'verified'
+	| 'withheld';
 
-export type MediaFields = 'media_key' |
-	'type' |
-	'duration_ms' |
-	'height' |
-	'non_public_metrics' |
-	'organic_metrics' |
-	'preview_image_url' |
-	'promoted_metrics' |
-	'public_metrics' |
-	'width' |
-	'alt_text';
+export type MediaFields =
+	| 'media_key'
+	| 'type'
+	| 'duration_ms'
+	| 'height'
+	| 'non_public_metrics'
+	| 'organic_metrics'
+	| 'preview_image_url'
+	| 'promoted_metrics'
+	| 'public_metrics'
+	| 'width'
+	| 'alt_text';
 
-export type PollFields = 'id' |
-	'options' |
-	'duration_minutes' |
-	'end_datetime' |
-	'voting_status';
+export type PollFields =
+	| 'id'
+	| 'options'
+	| 'duration_minutes'
+	| 'end_datetime'
+	| 'voting_status';
 
-export type PlaceFields = 'full_name' |
-	'id' |
-	'contained_within' |
-	'country' |
-	'country_code' |
-	'geo' |
-	'name' |
-	'place_type';
+export type PlaceFields =
+	| 'full_name'
+	| 'id'
+	| 'contained_within'
+	| 'country'
+	| 'country_code'
+	| 'geo'
+	| 'name'
+	| 'place_type';
 
-export type ExpansionsField = 'author_id' |
-	'referenced_tweets.id' |
-	'in_reply_to_user_id' |
-	'attachments.media_keys' |
-	'attachments.poll_ids' |
-	'geo.place_id' |
-	'entities.mentions.username' |
-	'referenced_tweets.id.author_id' |
-	'pinned_tweet_id';
+export type ExpansionsField =
+	| 'author_id'
+	| 'referenced_tweets.id'
+	| 'in_reply_to_user_id'
+	| 'attachments.media_keys'
+	| 'attachments.poll_ids'
+	| 'geo.place_id'
+	| 'entities.mentions.username'
+	| 'referenced_tweets.id.author_id'
+	| 'pinned_tweet_id';
 
-export interface V2Params
-{
+export interface V2Params {
 	expansions?: ExpansionsField[];
 	media?: MediaFields[];
 	place?: PlaceFields[];

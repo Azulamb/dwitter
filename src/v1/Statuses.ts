@@ -1,8 +1,7 @@
 import * as TwitterTypes from '../twitter.d.ts';
 import { APICounter } from '../APICounter.ts';
 
-interface HomeTimelineOption
-{
+interface HomeTimelineOption {
 	count?: number; // Default 20, Max 200
 	since_id?: number; //
 	max_id?: number; //
@@ -11,8 +10,7 @@ interface HomeTimelineOption
 	include_entities?: boolean; //
 }
 
-interface UserTimelineOption
-{
+interface UserTimelineOption {
 	count?: number; // Max 200
 	since_id?: number;
 	max_id?: number; //
@@ -23,8 +21,7 @@ interface UserTimelineOption
 	screen_name?: string;
 }
 
-interface ShowOption
-{
+interface ShowOption {
 	trim_user?: boolean;
 	include_my_retweet?: boolean;
 	include_entities?: boolean;
@@ -32,12 +29,10 @@ interface ShowOption
 	include_card_uri?: boolean;
 }
 
-export class Statuses extends APICounter
-{
+export class Statuses extends APICounter {
 	protected path = 'statuses/';
 
-	protected limits =
-	{
+	protected limits = {
 		// destroy:{}, // https://developer.twitter.com/en/docs/twitter-api/v1/tweets/post-and-engage/api-reference/post-statuses-destroy-id
 		home_timeline: { count: 15, time: 15 }, // https://developer.twitter.com/en/docs/twitter-api/v1/tweets/timelines/api-reference/get-statuses-home_timeline
 		user_timeline: { count: 900, time: 15 }, // https://developer.twitter.com/en/docs/twitter-api/v1/tweets/timelines/api-reference/get-statuses-user_timeline
@@ -53,76 +48,70 @@ export class Statuses extends APICounter
 	/**
 	 * https://developer.twitter.com/en/docs/twitter-api/v1/tweets/timelines/api-reference/get-statuses-user_timeline
 	 */
-	public home_timeline( option: HomeTimelineOption = {} ): Promise<TwitterTypes.Tweet[]>
-	{
+	public home_timeline(option: HomeTimelineOption = {}): Promise<TwitterTypes.Tweet[]> {
 		const api = 'home_timeline';
-		if ( this.isLimit( api ) ) { return this.limitError(); }
+		if (this.isLimit(api)) {
+			return this.limitError();
+		}
 
-		return this.oauthFetch.get( this.createUrl( api ), <{}>option ).then( ( response ) =>
-		{
-			this.addSuccessRequest( api );
+		return this.oauthFetch.get(this.createUrl(api), <{}> option).then((response) => {
+			this.addSuccessRequest(api);
 			return response.json();
-		} ).then( async ( result ) =>
-		{
-			if ( result.errors )
-			{
-				throw new Error( `Error: ${ JSON.stringify( result ) }` );
+		}).then(async (result) => {
+			if (result.errors) {
+				throw new Error(`Error: ${JSON.stringify(result)}`);
 			}
 
 			await this.save();
 
 			return result;
-		} );
+		});
 	}
 
 	/**
 	 * https://developer.twitter.com/en/docs/twitter-api/v1/tweets/timelines/api-reference/get-statuses-user_timeline
 	 */
-	public user_timeline( option: UserTimelineOption = {} ): Promise<TwitterTypes.Tweet[]>
-	{
+	public user_timeline(option: UserTimelineOption = {}): Promise<TwitterTypes.Tweet[]> {
 		const api = 'user_timeline';
-		if ( this.isLimit( api ) ) { return this.limitError(); }
+		if (this.isLimit(api)) {
+			return this.limitError();
+		}
 
-		return this.oauthFetch.get( this.createUrl( api ), <{}>option ).then( ( response ) =>
-		{
-			this.addSuccessRequest( api );
+		return this.oauthFetch.get(this.createUrl(api), <{}> option).then((response) => {
+			this.addSuccessRequest(api);
 			return response.json();
-		} ).then( async ( result ) =>
-		{
-			if ( result.errors )
-			{
-				throw new Error( `Error: ${ JSON.stringify( result ) }` );
+		}).then(async (result) => {
+			if (result.errors) {
+				throw new Error(`Error: ${JSON.stringify(result)}`);
 			}
 
 			await this.save();
 
 			return result;
-		} );
+		});
 	}
 
 	/**
 	 * https://developer.twitter.com/en/docs/twitter-api/v1/tweets/post-and-engage/api-reference/get-statuses-show-id
 	 */
-	public show( id: string, option: ShowOption = {} ): Promise<TwitterTypes.Tweet[]>
-	{
+	public show(id: string, option: ShowOption = {}): Promise<TwitterTypes.Tweet[]> {
 		const api = 'show';
-		if ( this.isLimit( api ) ) { return this.limitError(); }
-		const opt = Object.assign( { id: id }, option );
+		if (this.isLimit(api)) {
+			return this.limitError();
+		}
+		const opt = Object.assign({ id: id }, option);
 
-		return this.oauthFetch.get( this.createUrl( api ), <{}>opt ).then( ( response ) =>
-		{
-			this.addSuccessRequest( api );
+		return this.oauthFetch.get(this.createUrl(api), <{}> opt).then((response) => {
+			this.addSuccessRequest(api);
 			return response.json();
-		} ).then( async ( result ) =>
-		{
-			if ( result.errors )
-			{
-				throw new Error( `Error: ${ JSON.stringify( result ) }` );
+		}).then(async (result) => {
+			if (result.errors) {
+				throw new Error(`Error: ${JSON.stringify(result)}`);
 			}
 
 			await this.save();
 
 			return result;
-		} );
+		});
 	}
 }
