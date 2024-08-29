@@ -226,11 +226,28 @@ export type ExpansionsField =
 	| 'referenced_tweets.id.author_id'
 	| 'pinned_tweet_id';
 
-export interface V2Params {
+export interface V2ParamsExpansions {
 	expansions?: ExpansionsField[];
+}
+export interface V2ParamsMedia {
 	media?: MediaFields[];
+}
+export interface V2ParamsPlace {
 	place?: PlaceFields[];
+}
+export interface V2ParamsTweet {
+	'tweet.fields'?: TweetFields[];
+}
+export interface V2ParamsPoll {
 	poll?: PollFields[];
-	tweet?: TweetFields[];
-	user?: UserFields[];
+}
+export interface V2ParamsUser {
+	'user.fields'?: UserFields[];
+}
+
+export interface V2ParamsExpansionsTweetUser extends V2ParamsTweet, V2ParamsUser {
+	expansions?: ['pinned_tweet_id'];
+}
+
+export interface V2ParamsAll extends V2ParamsExpansions, V2ParamsMedia, V2ParamsPlace, V2ParamsTweet, V2ParamsPoll, V2ParamsUser {
 }

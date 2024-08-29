@@ -6,7 +6,7 @@ import { Poll } from './Poll.ts';
 import { Tweet } from './Tweet.ts';
 import { User } from './User.ts';
 
-export function Fields(option?: TwitterTypes.V2Params) {
+export function Fields(option?: TwitterTypes.V2ParamsAll) {
 	const params = new URLSearchParams();
 
 	if (!option) {
@@ -29,12 +29,12 @@ export function Fields(option?: TwitterTypes.V2Params) {
 		Poll.createField(option.poll, params);
 	}
 
-	if (option.tweet && 0 < option.tweet.length) {
-		Tweet.createField(option.tweet, params);
+	if (option['tweet.fields'] && 0 < option['tweet.fields'].length) {
+		Tweet.createField(option['tweet.fields'], params);
 	}
 
-	if (option.user && 0 < option.user.length) {
-		User.createField(option.user, params);
+	if (option['user.fields'] && 0 < option['user.fields'].length) {
+		User.createField(option['user.fields'], params);
 	}
 
 	return params;

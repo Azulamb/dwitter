@@ -2,9 +2,7 @@ import * as TwitterTypes from './twitter.d.ts';
 import { APICounter } from './APICounter.ts';
 import { HMAC_SHA1 } from './Crypto.ts';
 
-type FetchParams = {
-	[keys: string]: string | number | boolean | undefined;
-};
+type FetchParams = Record<string, string | number | boolean | undefined>;
 
 type RequestTokenOption = {
 	oauth_callback: string;
@@ -36,9 +34,31 @@ export class OAuth extends APICounter {
 		return this;
 	}
 
-	protected request(method: string, url: string, params: FetchParams, disableToken = false) {
+	public request_(method: string, url: string, params: FetchParams | URLSearchParams, disableToken = false) {
 		const authorization = this.createAuthHeader(method, url, params, disableToken);
+		url = this.createRequestUrl(url, params);
 
+		console.log(params.toString());
+		console.log(method, url);
+		console.log(authorization);
+		console.log(
+			this.createRequestUrl(url, params),
+			{
+				method: method,
+				headers: {
+					Authorization: authorization,
+				},
+			}
+		);
+	}
+
+	protected request(method: string, url: string, params: FetchParams | URLSearchParams, body?: FetchParams | FormData, disableToken = false) {
+		const authorization = this.createAuthHeader(method, url, params, disableToken);
+		url = this.createRequestUrl(url, params);
+
+		console.log(params.toString());
+		console.log(method, url);
+		console.log(authorization);
 		return fetch(
 			this.createRequestUrl(url, params),
 			{
@@ -50,12 +70,12 @@ export class OAuth extends APICounter {
 		);
 	}
 
-	private createAuthHeader(method: string, url: string, params: FetchParams, disableToken = false) {
+	private createAuthHeader(method: string, url: string, params: FetchParams | URLSearchParams, disableToken = false) {
 		const oauthParams: { [keys: string]: string } = {
 			oauth_consumer_key: this.apiKey,
-			oauth_nonce: this.generateNonce(),
+			oauth_nonce: 'kYjzVBB8Y0ZFabxSWbWovY3uYSQ2pTgmZeNu2VS4cg',//this.generateNonce(),
 			oauth_signature_method: 'HMAC-SHA1',
-			oauth_timestamp: this.getCurrentTimestamp(),
+			oauth_timestamp: '1318622958',//this.getCurrentTimestamp(),
 			oauth_version: '1.0',
 		};
 		if (!disableToken) {
@@ -68,6 +88,7 @@ export class OAuth extends APICounter {
 		].join('&');
 
 		const signatureBase = this.generateSignatureBase(method, url, params, oauthParams);
+		console.log(signatureBase);
 
 		const signature = HMAC_SHA1.toBase64(signatureKey, signatureBase);
 
@@ -98,20 +119,30 @@ export class OAuth extends APICounter {
 		});
 	}
 
-	private generateSignatureBase(method: string, url: string, params: FetchParams, oauthParams: { [keys: string]: string }) {
+	private generateSignatureBase(method: string, url: string, params: FetchParams | URLSearchParams, oauthParams: { [keys: string]: string }) {
 		const allParams: { [keys: string]: string } = {};
 
 		Object.keys(oauthParams).forEach((key) => {
 			allParams[this.encode(key)] = this.encode(oauthParams[key]);
 		});
 
-		Object.keys(params).forEach((key) => {
-			const value = params[key];
-			if (value === undefined) {
-				return;
+		if (params instanceof URLSearchParams) {
+			for (const key of params.keys()) {
+				const value = params.get(key);
+				if (value === undefined) {
+					continue;
+				}
+				allParams[this.encode(key)] = this.encode(value + '');
 			}
-			allParams[this.encode(key)] = this.encode(value + '');
-		});
+		} else {
+			Object.keys(params).forEach((key) => {
+				const value = params[key];
+				if (value === undefined) {
+					return;
+				}
+				allParams[this.encode(key)] = this.encode(value + '');
+			});
+		}
 
 		const encodeParams = ((params) => {
 			const keys = Object.keys(params);
@@ -121,6 +152,7 @@ export class OAuth extends APICounter {
 				return `${key}=${params[key]}`;
 			});
 		})(allParams);
+		console.log(encodeParams);
 
 		return [
 			this.encode(method),
@@ -129,7 +161,7 @@ export class OAuth extends APICounter {
 		].join('&');
 	}
 
-	protected createRequestUrl(url: string, params: FetchParams) {
+	protected convertParams(params: FetchParams) {
 		const query = new URLSearchParams();
 		Object.keys(params).forEach((key) => {
 			if (params[key] === undefined) {
@@ -137,17 +169,22 @@ export class OAuth extends APICounter {
 			}
 			query.append(key, params[key] + '');
 		});
+		return query;
+	}
+
+	protected createRequestUrl(url: string, params: FetchParams | URLSearchParams) {
+		const query = params instanceof URLSearchParams ? params : this.convertParams(params);
 		const queryString = query.toString();
 
 		return queryString ? url + '?' + queryString : url;
 	}
 
-	public get(url: string, params: FetchParams) {
+	public get(url: string, params: FetchParams | URLSearchParams) {
 		return this.request('GET', url, params);
 	}
 
-	public post(url: string, params: FetchParams) {
-		return this.request('POST', url, params);
+	public post(url: string, params: FetchParams | URLSearchParams, body?: FetchParams | FormData) {
+		return this.request('POST', url, params, body);
 	}
 
 	protected limits = {
@@ -157,7 +194,7 @@ export class OAuth extends APICounter {
 	public request_token(option: RequestTokenOption): Promise<string> {
 		const api = 'request_token';
 
-		return this.request('POST', this.getPath() + api, option, true).then((response) => {
+		return this.request('POST', this.getPath() + api, option, null, true).then((response) => {
 			if (response.status === 200) {
 				return response.text();
 			}

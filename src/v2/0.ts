@@ -1,10 +1,12 @@
 import { TwitterAPI } from '../TwitterAPI.ts';
 import { Tweets } from './Tweets.ts';
+import { Users } from './Users.ts';
 
 export class V2_0 extends TwitterAPI {
 	protected path = '2/';
 
 	public tweets = new Tweets(this);
+	public users = new Users(this);
 
 	public export() {
 		return {

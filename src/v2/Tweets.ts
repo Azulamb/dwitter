@@ -9,7 +9,7 @@ export class Tweets extends APICounter {
 		get_id: { count: 900, time: 15 }, // https://developer.twitter.com/en/docs/twitter-api/tweets/lookup/api-reference/get-tweets-id
 	};
 
-	public get(id: string, option?: TwitterTypes.V2Params) {
+	public get(id: string, option?: TwitterTypes.V2ParamsAll) {
 		const api = 'get_id';
 		if (this.isLimit(api)) {
 			return this.limitError();
